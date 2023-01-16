@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class InMemoryFilmRepository {
@@ -36,5 +37,11 @@ public class InMemoryFilmRepository {
 
     public Collection<Film> list() {
         return filmsStorage.values();
+    }
+
+    public Optional<Film> findFilmById(Long id) {
+        return filmsStorage.containsKey(id)
+                ? Optional.of(filmsStorage.get(id))
+                : Optional.empty();
     }
 }

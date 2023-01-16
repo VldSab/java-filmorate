@@ -39,9 +39,15 @@ public class InMemoryUserRepository {
         return usersStorage.values();
     }
 
-    public Optional<User> findByLogin(String login) {
-        return loginsStorage.keySet().contains(login)
+    public Optional<User> findUserByLogin(String login) {
+        return loginsStorage.containsKey(login)
                 ? Optional.of(usersStorage.get(loginsStorage.get(login)))
+                : Optional.empty();
+    }
+
+    public Optional<User> findUserById(Long id) {
+        return usersStorage.containsKey(id)
+                ? Optional.of(usersStorage.get(id))
                 : Optional.empty();
     }
 }
