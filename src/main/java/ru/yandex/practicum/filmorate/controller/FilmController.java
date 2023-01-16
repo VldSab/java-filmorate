@@ -28,21 +28,24 @@ public class FilmController {
     public ResponseEntity<Response> saveFilm(@Valid @RequestBody Film film) {
         Film savedFilm;
         String message;
+        HttpStatus status;
         try {
             savedFilm = filmService.addFilm(film);
             message = "Film added";
+            status = HttpStatus.OK;
             log.info("Film added with id {}", film.getId());
         } catch (ValidationException e) {
             savedFilm = null;
             message = e.getMessage();
+            status = HttpStatus.BAD_REQUEST;
             log.info("Film not added with exception: {}", e.getMessage());
         }
         return ResponseEntity.ok(
                 Response.builder()
                         .time(LocalDateTime.now())
                         .message(message)
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
+                        .status(status)
+                        .statusCode(status.value())
                         .data(Map.of("film", savedFilm == null ? "" : savedFilm))
                         .build()
         );
@@ -50,16 +53,18 @@ public class FilmController {
 
     @PutMapping
     public ResponseEntity<Response> updateFilm(@Valid @RequestBody Film film) {
-
         Film uppdatedFilm;
         String message;
+        HttpStatus status;
         try {
             uppdatedFilm = filmService.updateFilm(film);
             message = "Film updated";
+            status = HttpStatus.OK;
             log.info("Film updated with id {}", film.getId());
         } catch (ValidationException e) {
             uppdatedFilm = null;
             message = e.getMessage();
+            status = HttpStatus.BAD_REQUEST;
             log.info("Film not updated with exception: {}", e.getMessage());
         }
 
@@ -67,8 +72,8 @@ public class FilmController {
                 Response.builder()
                         .time(LocalDateTime.now())
                         .message(message)
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
+                        .status(status)
+                        .statusCode(status.value())
                         .data(Map.of("film", uppdatedFilm == null ? "" : uppdatedFilm))
                         .build()
         );

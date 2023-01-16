@@ -28,21 +28,24 @@ public class UserController {
     public ResponseEntity<Response> saveUser(@Valid @RequestBody User user) {
         User savedUser;
         String message;
+        HttpStatus status;
         try {
             savedUser = userService.addUser(user);
             message = "User added";
             log.info("User added with id {}", user.getId());
+            status = HttpStatus.OK;
         } catch (ValidationException e) {
             savedUser = null;
             message = e.getMessage();
+            status = HttpStatus.BAD_REQUEST;
             log.info("User not added with exception: {}", e.getMessage());
         }
         return ResponseEntity.ok(
                 Response.builder()
                         .time(LocalDateTime.now())
                         .message(message)
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
+                        .status(status)
+                        .statusCode(status.value())
                         .data(Map.of("user", savedUser == null ? "" : savedUser))
                         .build()
         );
@@ -53,13 +56,16 @@ public class UserController {
 
         User uppdatedUser;
         String message;
+        HttpStatus status;
         try {
             uppdatedUser = userService.updateUser(user);
             message = "User updated";
             log.info("User updated with id {}", user.getId());
+            status = HttpStatus.OK;
         } catch (ValidationException e) {
             uppdatedUser = null;
             message = e.getMessage();
+            status = HttpStatus.BAD_REQUEST;
             log.info("User not updated with exception {}", user.getId());
         }
 
@@ -67,8 +73,8 @@ public class UserController {
                 Response.builder()
                         .time(LocalDateTime.now())
                         .message(message)
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
+                        .status(status)
+                        .statusCode(status.value())
                         .data(Map.of("user", uppdatedUser == null ? "" : uppdatedUser))
                         .build()
         );
