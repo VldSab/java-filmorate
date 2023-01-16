@@ -29,15 +29,15 @@ class UserServiceStandardTest {
             .build();
 
     private final User invalidUserEmail = User.builder()
-            .id(1L)
-            .login("login")
+            .id(2L)
+            .login("login2")
             .email("login")
             .birthday(LocalDate.of(2000, 3, 28))
             .build();
 
     private final User invalidUserBirthday = User.builder()
-            .id(1L)
-            .login("login")
+            .id(3L)
+            .login("login3")
             .email("login@mail.ru")
             .birthday(LocalDate.now())
             .build();

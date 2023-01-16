@@ -25,7 +25,7 @@ public class UserServiceStandard implements UserService {
             throw new ValidationException("Неверно введены email, login или дата рождения!");
         if (userRepository.findByLogin(user.getLogin()).isPresent())
             throw new ValidationException("Такой login уже существует!");
-        if (user.getName().isBlank() || user.getName() == null) user.setName(user.getLogin());
+        if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
         return userRepository.save(user);
     }
 
@@ -33,7 +33,7 @@ public class UserServiceStandard implements UserService {
     public User updateUser(User user) throws ValidationException {
         if (!isValidUser(user))
             throw new ValidationException("Неверно введены email, login или дата рождения!");
-        if (user.getName().isBlank() || user.getName() == null) user.setName(user.getLogin());
+        if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
         return userRepository.update(user);
     }
 
