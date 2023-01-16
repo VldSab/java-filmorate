@@ -24,7 +24,7 @@ public class FilmController {
      * Обработка ззапросов для работы с фильмами.
      */
     private final FilmServiceStandard filmService;
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<Response> saveFilm(@Valid @RequestBody Film film) {
         Film savedFilm;
         String message;
@@ -48,13 +48,13 @@ public class FilmController {
         );
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Response> updateFilm(@Valid @RequestBody Film film, @PathVariable("id") Long id) {
+    @PutMapping
+    public ResponseEntity<Response> updateFilm(@Valid @RequestBody Film film) {
 
         Film uppdatedFilm;
         String message;
         try {
-            uppdatedFilm = filmService.updateFilm(film, id);
+            uppdatedFilm = filmService.updateFilm(film);
             message = "Film updated";
             log.info("Film updated with id {}", film.getId());
         } catch (ValidationException e) {
@@ -74,7 +74,7 @@ public class FilmController {
         );
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<Response> getAllFilms() {
         log.info("Getting all films list");
         return ResponseEntity.ok(

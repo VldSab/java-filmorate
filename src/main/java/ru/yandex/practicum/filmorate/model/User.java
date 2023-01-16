@@ -16,7 +16,6 @@ public class User {
     /**
      * Модель польователя.
      */
-    @NonNull
     Long id;
     @ValidEmail
     String email;

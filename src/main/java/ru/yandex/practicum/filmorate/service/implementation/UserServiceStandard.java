@@ -26,11 +26,11 @@ public class UserServiceStandard implements UserService {
     }
 
     @Override
-    public User updateUser(User user, Long id) throws ValidationException {
+    public User updateUser(User user) throws ValidationException {
         if (!isValidUser(user))
             throw new ValidationException("Неверно введены email, login или дата рождения!");
         if (user.getName().isBlank()) user.setName(user.getLogin());
-        return userRepository.update(user, id);
+        return userRepository.update(user);
     }
 
     @Override

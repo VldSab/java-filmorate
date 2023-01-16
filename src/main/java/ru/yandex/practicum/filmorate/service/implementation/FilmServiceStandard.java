@@ -27,9 +27,9 @@ public class FilmServiceStandard implements FilmService {
     }
 
     @Override
-    public Film updateFilm(Film film, Long id) throws ValidationException {
+    public Film updateFilm(Film film) throws ValidationException {
         if (!isValidFilm(film)) throw new ValidationException("Неверно указаны данные о фильме!");
-        return filmRepository.update(film, id);
+        return filmRepository.update(film);
     }
 
     @Override

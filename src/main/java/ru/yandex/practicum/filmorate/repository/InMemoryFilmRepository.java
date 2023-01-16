@@ -15,12 +15,14 @@ public class InMemoryFilmRepository {
     private final Map<Long, Film> filmsStorage = new HashMap();
 
     public Film save(Film film) {
-        filmsStorage.put(film.getId(), film);
+        Long id = filmsStorage.size() + 1L;
+        film.setId(id);
+        filmsStorage.put(id, film);
         return film;
     }
 
-    public Film update(Film film, Long id) {
-        Film filmToUpdate = filmsStorage.get(id);
+    public Film update(Film film) {
+        Film filmToUpdate = filmsStorage.get(film.getId());
         if (filmToUpdate == null) {
             save(film);
             return film;

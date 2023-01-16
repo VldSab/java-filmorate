@@ -13,12 +13,14 @@ public class InMemoryUserRepository {
     private final Map<Long, User> usersStorage = new HashMap();
 
     public User save(User user) {
-        usersStorage.put(user.getId(), user);
+        Long id = usersStorage.size() + 1L;
+        user.setId(id);
+        usersStorage.put(id, user);
         return user;
     }
 
-    public User update(User user, Long id) {
-        User userToUpdate = usersStorage.get(id);
+    public User update(User user) {
+        User userToUpdate = usersStorage.get(user.getId());
         if (userToUpdate == null) {
             save(user);
             return user;

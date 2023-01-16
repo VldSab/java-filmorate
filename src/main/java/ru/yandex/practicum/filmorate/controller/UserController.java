@@ -24,7 +24,7 @@ public class UserController {
      * Обработка ззапросов для работы с фильмами.
      */
     private final UserServiceStandard userService;
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<Response> saveUser(@Valid @RequestBody User user) {
         User savedUser;
         String message;
@@ -48,13 +48,13 @@ public class UserController {
         );
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Response> updateUser(@Valid @RequestBody User user, @PathVariable("id") Long id) {
+    @PutMapping
+    public ResponseEntity<Response> updateUser(@Valid @RequestBody User user) {
 
         User uppdatedUser;
         String message;
         try {
-            uppdatedUser = userService.updateUser(user, id);
+            uppdatedUser = userService.updateUser(user);
             message = "User updated";
             log.info("User updated with id {}", user.getId());
         } catch (ValidationException e) {
@@ -74,7 +74,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<Response> getAllUsers() {
         log.info("Getting all users list");
         return ResponseEntity.ok(

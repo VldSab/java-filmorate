@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface UserService {
     User addUser(User user) throws ValidationException;
 
-    User updateUser(User user, Long id) throws ValidationException;
+    User updateUser(User user) throws ValidationException;
 
     Collection<User> listUsers();
 }

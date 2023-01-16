@@ -7,6 +7,6 @@ import java.util.Collection;
 
 public interface FilmService {
     Film addFilm(Film film) throws ValidationException;
-    Film updateFilm(Film film, Long id) throws ValidationException;
+    Film updateFilm(Film film) throws ValidationException;
     Collection<Film> listFilms();
 }

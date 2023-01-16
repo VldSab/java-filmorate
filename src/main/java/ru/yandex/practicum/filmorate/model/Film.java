@@ -17,7 +17,6 @@ public class Film {
     /**
      * Модель фильма.
      */
-    @NonNull
     Long id;
     @NotBlank
     String name;
