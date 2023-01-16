@@ -73,7 +73,7 @@ public class FilmController {
                         .message("All films")
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
-                        .data(Map.of("films", filmService.listFilms()))
+                        .data(filmService.listFilms())
                         .build()
         );
     }
@@ -86,7 +86,7 @@ public class FilmController {
                             .message(message)
                             .status(status)
                             .statusCode(status.value())
-                            .data(Map.of("film", film))
+                            .data(film)
                             .build()
             );
         return ResponseEntity.badRequest().body(
@@ -95,7 +95,7 @@ public class FilmController {
                         .message(message)
                         .status(status)
                         .statusCode(status.value())
-                        .data(Map.of("film", ""))
+                        .data("")
                         .build()
         );
     }

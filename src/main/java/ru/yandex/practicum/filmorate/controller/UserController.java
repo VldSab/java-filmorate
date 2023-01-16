@@ -74,7 +74,7 @@ public class UserController {
                         .message("All users")
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
-                        .data(Map.of("users", userService.listUsers()))
+                        .data(userService.listUsers())
                         .build()
         );
     }
@@ -87,8 +87,8 @@ public class UserController {
                             .message(message)
                             .status(status)
                             .statusCode(status.value())
-                            .data(Map.of("user", user))
-                             .build()
+                            .data(user)
+                            .build()
             );
         return ResponseEntity.badRequest().body(
                 Response.builder()
@@ -96,7 +96,7 @@ public class UserController {
                         .message(message)
                         .status(status)
                         .statusCode(status.value())
-                        .data(Map.of("user", ""))
+                        .data("")
                         .build()
         );
     }
