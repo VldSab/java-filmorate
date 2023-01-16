@@ -11,11 +11,14 @@ public class InMemoryUserRepository {
      * Хранилище пользователей в оперативной памяти.
      */
     private final Map<Long, User> usersStorage = new HashMap();
+    private final HashMap<String, Long> loginsStorage = new HashMap<>();
+
 
     public User save(User user) {
         Long id = usersStorage.size() + 1L;
         user.setId(id);
         usersStorage.put(id, user);
+        loginsStorage.put(user.getLogin(), id);
         return user;
     }
 
@@ -34,5 +37,11 @@ public class InMemoryUserRepository {
 
     public Collection<User> list() {
         return usersStorage.values();
+    }
+
+    public Optional<User> findByLogin(String login) {
+        return loginsStorage.keySet().contains(login)
+                ? Optional.of(usersStorage.get(loginsStorage.get(login)))
+                : Optional.empty();
     }
 }

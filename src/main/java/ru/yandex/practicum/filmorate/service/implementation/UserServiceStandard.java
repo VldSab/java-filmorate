@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +18,14 @@ public class UserServiceStandard implements UserService {
      * Бизнес-логика работы с пользователями.
      */
     private final InMemoryUserRepository userRepository;
+
     @Override
     public User addUser(User user) throws ValidationException {
         if (!isValidUser(user))
             throw new ValidationException("Неверно введены email, login или дата рождения!");
-        if (user.getName() == null) user.setName(user.getLogin());
+        if (userRepository.findByLogin(user.getLogin()).isPresent())
+            throw new ValidationException("Такой login уже существует!");
+        if (user.getName().isBlank() || user.getName() == null) user.setName(user.getLogin());
         return userRepository.save(user);
     }
 
@@ -29,7 +33,7 @@ public class UserServiceStandard implements UserService {
     public User updateUser(User user) throws ValidationException {
         if (!isValidUser(user))
             throw new ValidationException("Неверно введены email, login или дата рождения!");
-        if (user.getName().isBlank()) user.setName(user.getLogin());
+        if (user.getName().isBlank() || user.getName() == null) user.setName(user.getLogin());
         return userRepository.update(user);
     }
 
@@ -40,7 +44,7 @@ public class UserServiceStandard implements UserService {
 
     private boolean isValidUser(User user) {
         boolean isValidEmail = user.getEmail().contains("@");
-        boolean isValidLogin = !user.getLogin().contains(" ");
+        boolean isValidLogin = !user.getLogin().isBlank() && !user.getLogin().contains(" ");
         boolean isValidBirthday = true;
         if (user.getBirthday() != null)
             isValidBirthday = user.getBirthday().isBefore(LocalDate.now()) && !user.getBirthday().isEqual(LocalDate.now());

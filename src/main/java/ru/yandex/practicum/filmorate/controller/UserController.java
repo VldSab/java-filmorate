@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Response;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.implementation.UserServiceStandard;
@@ -40,15 +41,7 @@ public class UserController {
             status = HttpStatus.BAD_REQUEST;
             log.info("User not added with exception: {}", e.getMessage());
         }
-        return ResponseEntity.ok(
-                Response.builder()
-                        .time(LocalDateTime.now())
-                        .message(message)
-                        .status(status)
-                        .statusCode(status.value())
-                        .data(Map.of("user", savedUser == null ? "" : savedUser))
-                        .build()
-        );
+        return getResponseEntity(savedUser, message, status);
     }
 
     @PutMapping
@@ -69,15 +62,7 @@ public class UserController {
             log.info("User not updated with exception {}", user.getId());
         }
 
-        return ResponseEntity.ok(
-                Response.builder()
-                        .time(LocalDateTime.now())
-                        .message(message)
-                        .status(status)
-                        .statusCode(status.value())
-                        .data(Map.of("user", uppdatedUser == null ? "" : uppdatedUser))
-                        .build()
-        );
+        return getResponseEntity(uppdatedUser, message, status);
     }
 
     @GetMapping
@@ -90,6 +75,28 @@ public class UserController {
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
                         .data(Map.of("users", userService.listUsers()))
+                        .build()
+        );
+    }
+
+    private ResponseEntity<Response> getResponseEntity(User user, String message, HttpStatus status) {
+        if (status.equals(HttpStatus.OK))
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .time(LocalDateTime.now())
+                            .message(message)
+                            .status(status)
+                            .statusCode(status.value())
+                            .data(Map.of("user", user))
+                             .build()
+            );
+        return ResponseEntity.badRequest().body(
+                Response.builder()
+                        .time(LocalDateTime.now())
+                        .message(message)
+                        .status(status)
+                        .statusCode(status.value())
+                        .data(Map.of("user", ""))
                         .build()
         );
     }

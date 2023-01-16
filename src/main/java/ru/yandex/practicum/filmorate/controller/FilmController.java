@@ -40,16 +40,10 @@ public class FilmController {
             status = HttpStatus.BAD_REQUEST;
             log.info("Film not added with exception: {}", e.getMessage());
         }
-        return ResponseEntity.ok(
-                Response.builder()
-                        .time(LocalDateTime.now())
-                        .message(message)
-                        .status(status)
-                        .statusCode(status.value())
-                        .data(Map.of("film", savedFilm == null ? "" : savedFilm))
-                        .build()
-        );
+        return getResponseEntity(savedFilm, message, status);
     }
+
+
 
     @PutMapping
     public ResponseEntity<Response> updateFilm(@Valid @RequestBody Film film) {
@@ -67,16 +61,7 @@ public class FilmController {
             status = HttpStatus.BAD_REQUEST;
             log.info("Film not updated with exception: {}", e.getMessage());
         }
-
-        return ResponseEntity.ok(
-                Response.builder()
-                        .time(LocalDateTime.now())
-                        .message(message)
-                        .status(status)
-                        .statusCode(status.value())
-                        .data(Map.of("film", uppdatedFilm == null ? "" : uppdatedFilm))
-                        .build()
-        );
+        return getResponseEntity(uppdatedFilm, message, status);
     }
 
     @GetMapping
@@ -89,6 +74,28 @@ public class FilmController {
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
                         .data(Map.of("films", filmService.listFilms()))
+                        .build()
+        );
+    }
+
+    private ResponseEntity<Response> getResponseEntity(Film film, String message, HttpStatus status) {
+        if (status.equals(HttpStatus.OK))
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .time(LocalDateTime.now())
+                            .message(message)
+                            .status(status)
+                            .statusCode(status.value())
+                            .data(Map.of("film", film))
+                            .build()
+            );
+        return ResponseEntity.badRequest().body(
+                Response.builder()
+                        .time(LocalDateTime.now())
+                        .message(message)
+                        .status(status)
+                        .statusCode(status.value())
+                        .data(Map.of("film", ""))
                         .build()
         );
     }
