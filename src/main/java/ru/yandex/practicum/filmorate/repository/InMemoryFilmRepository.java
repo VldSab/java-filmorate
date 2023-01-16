@@ -9,6 +9,9 @@ import java.util.Map;
 
 @Repository
 public class InMemoryFilmRepository {
+    /**
+     * Хранилище фильмов в оперативной памяти.
+     */
     private final Map<Long, Film> filmsStorage = new HashMap();
 
     public Film save(Film film) {

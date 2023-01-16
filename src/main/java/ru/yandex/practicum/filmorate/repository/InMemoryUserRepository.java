@@ -7,6 +7,9 @@ import java.util.*;
 
 @Repository
 public class InMemoryUserRepository {
+    /**
+     * Хранилище пользователей в оперативной памяти.
+     */
     private final Map<Long, User> usersStorage = new HashMap();
 
     public User save(User user) {

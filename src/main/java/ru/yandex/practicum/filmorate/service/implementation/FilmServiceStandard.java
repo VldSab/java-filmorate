@@ -13,7 +13,9 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 public class FilmServiceStandard implements FilmService {
-
+    /**
+     * Бизнес-логика работы с фильмами.
+     */
     private final static Long MAX_DESCRIPTION_LENGTH = 200L;
     private final static LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
     private final InMemoryFilmRepository filmRepository;

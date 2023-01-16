@@ -13,6 +13,9 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 public class UserServiceStandard implements UserService {
+    /**
+     * Бизнес-логика работы с пользователями.
+     */
     private final InMemoryUserRepository userRepository;
     @Override
     public User addUser(User user) throws ValidationException {
@@ -40,7 +43,7 @@ public class UserServiceStandard implements UserService {
         boolean isValidLogin = !user.getLogin().contains(" ");
         boolean isValidBirthday = true;
         if (user.getBirthday() != null)
-            isValidBirthday = user.getBirthday().isBefore(LocalDate.now());
+            isValidBirthday = user.getBirthday().isBefore(LocalDate.now()) && !user.getBirthday().isEqual(LocalDate.now());
         return isValidEmail && isValidLogin && isValidBirthday;
     }
 }
