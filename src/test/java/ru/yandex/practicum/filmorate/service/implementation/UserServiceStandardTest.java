@@ -12,12 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceStandardTest {
 
-    private static InMemoryUserRepository userRepository;
     private static UserServiceStandard serviceStandard;
 
     @BeforeAll
     public static void setServiceStandard() {
-        userRepository = new InMemoryUserRepository();
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
         serviceStandard = new UserServiceStandard(userRepository);
     }
 

@@ -13,12 +13,13 @@ public class InMemoryFilmRepository {
     /**
      * Хранилище фильмов в оперативной памяти.
      */
-    private final Map<Long, Film> filmsStorage = new HashMap();
+    private final Map<Long, Film> filmsStorage = new HashMap<>();
+    private static Long id = 1L;
 
     public Film save(Film film) {
-        Long id = filmsStorage.size() + 1L;
         film.setId(id);
         filmsStorage.put(id, film);
+        id += 1;
         return film;
     }
 

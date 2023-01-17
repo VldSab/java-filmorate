@@ -12,13 +12,13 @@ public class InMemoryUserRepository {
      */
     private final Map<Long, User> usersStorage = new HashMap();
     private final HashMap<String, Long> loginsStorage = new HashMap<>();
-
+    private static Long id = 1L;
 
     public User save(User user) {
-        Long id = usersStorage.size() + 1L;
         user.setId(id);
         usersStorage.put(id, user);
         loginsStorage.put(user.getLogin(), id);
+        id += 1;
         return user;
     }
 

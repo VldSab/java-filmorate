@@ -12,12 +12,11 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FilmServiceStandardTest {
-    private static InMemoryFilmRepository filmRepository;
     private static FilmServiceStandard serviceStandard;
 
     @BeforeAll
     public static void setServiceStandard() {
-        filmRepository = new InMemoryFilmRepository();
+        InMemoryFilmRepository filmRepository = new InMemoryFilmRepository();
         serviceStandard = new FilmServiceStandard(filmRepository);
     }
 

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.InMemoryFilmRepository;
@@ -27,9 +28,9 @@ public class FilmServiceStandard implements FilmService {
     }
 
     @Override
-    public Film updateFilm(Film film) throws ValidationException {
+    public Film updateFilm(Film film) throws ValidationException, NotFoundException {
         if (filmRepository.findFilmById(film.getId()).isEmpty())
-            throw new ValidationException("Нет фильма с таким id");
+            throw new NotFoundException("Нет фильма с таким id");
         if (!isValidFilm(film))
             throw new ValidationException("Неверно указаны данные о фильме!");
         return filmRepository.update(film);

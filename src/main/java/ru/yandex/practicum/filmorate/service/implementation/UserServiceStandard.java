@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.InMemoryUserRepository;
@@ -29,11 +30,11 @@ public class UserServiceStandard implements UserService {
     }
 
     @Override
-    public User updateUser(User user) throws ValidationException {
+    public User updateUser(User user) throws ValidationException, NotFoundException {
         if (user.getId() == null)
             throw new ValidationException("Не указан id пользователя!");
         if (userRepository.findUserById(user.getId()).isEmpty())
-            throw new ValidationException("Не существует пользователя с таким id");
+            throw new NotFoundException("Не существует пользователя с таким id");
         if (!isValidUser(user))
             throw new ValidationException("Неверно введены email, login или дата рождения!");
         if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
