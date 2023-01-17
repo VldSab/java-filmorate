@@ -50,7 +50,7 @@ public class FilmServiceStandard implements FilmService {
             isValidDate = film.getReleaseDate().isAfter(MIN_RELEASE_DATE);
         boolean isValidDuration = true;
         if (film.getDuration() != null)
-            isValidDuration = !film.getDuration().isNegative();
+            isValidDuration = film.getDuration() > 0;
         return isValidLength && isValidDate && isValidDuration;
     }
 }

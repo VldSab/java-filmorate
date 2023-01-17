@@ -23,14 +23,14 @@ class FilmServiceStandardTest {
     private final Film validFilm = Film.builder()
             .id(1L)
             .name("Name")
-            .duration(Duration.ofMinutes(90))
+            .duration(90L)
             .releaseDate(LocalDate.of(2020, 11, 12))
             .build();
 
     private final Film invalidFilmOfDuration = Film.builder()
             .id(2L)
             .name("Name2")
-            .duration(Duration.ofMinutes(-90))
+            .duration(-90L)
             .build();
 
     private final Film invalidFilmOfDate= Film.builder()

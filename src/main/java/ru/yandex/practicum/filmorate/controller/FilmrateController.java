@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.Response;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public abstract class FilmrateController {
     public ResponseEntity<Response> createResponse(HttpStatus status, String message, Object data) {
@@ -42,7 +43,13 @@ public abstract class FilmrateController {
                             .build()
             );
         if (status.equals(HttpStatus.NOT_FOUND))
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.of(Optional.of(
+                    Response.builder()
+                            .time(LocalDateTime.now())
+                            .status(status)
+                            .statusCode(status.value())
+                            .build()
+            ));
         return ResponseEntity.internalServerError().build();
     }
 }
