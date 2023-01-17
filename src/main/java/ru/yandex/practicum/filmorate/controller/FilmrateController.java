@@ -43,13 +43,13 @@ public abstract class FilmrateController {
                             .build()
             );
         if (status.equals(HttpStatus.NOT_FOUND))
-            return ResponseEntity.of(Optional.of(
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Response.builder()
                             .time(LocalDateTime.now())
                             .status(status)
-                            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                            .statusCode(status.value())
                             .build()
-            ));
+            );
         return ResponseEntity.internalServerError().build();
     }
 }
