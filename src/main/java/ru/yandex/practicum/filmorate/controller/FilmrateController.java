@@ -47,7 +47,7 @@ public abstract class FilmrateController {
                     Response.builder()
                             .time(LocalDateTime.now())
                             .status(status)
-                            .statusCode(status.value())
+                            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                             .build()
             ));
         return ResponseEntity.internalServerError().build();
