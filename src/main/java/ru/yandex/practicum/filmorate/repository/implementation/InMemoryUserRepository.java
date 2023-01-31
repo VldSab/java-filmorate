@@ -5,6 +5,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserStorage {
@@ -50,28 +51,28 @@ public class InMemoryUserRepository implements UserStorage {
     public boolean addFriend(Long id, Long friendId) {
         User user = usersStorage.get(id);
         User friend = usersStorage.get(friendId);
-        return user.getFriends().add(friend) && friend.getFriends().add(user);
+        return user.getFriends().add(friendId) && friend.getFriends().add(id);
     }
 
     @Override
     public boolean deleteFriend(Long id, Long friendId) {
         User user = usersStorage.get(id);
         User friend = usersStorage.get(friendId);
-        return user.getFriends().remove(friend) && friend.getFriends().remove(user);
+        return user.getFriends().remove(friendId) && friend.getFriends().remove(id);
     }
 
     @Override
     public Collection<User> getCommonFriends(Long id, Long userId) {
         User user = usersStorage.get(id);
         User secondUser = usersStorage.get(userId);
-        Set<User> intersection = new HashSet<>(user.getFriends());
+        Set<Long> intersection = new HashSet<>(user.getFriends());
         intersection.retainAll(secondUser.getFriends());
-        return intersection;
+        return intersection.stream().map(usersStorage::get).collect(Collectors.toSet());
     }
 
     @Override
     public Collection<User> getFriends(Long id) {
-        return usersStorage.get(id).getFriends();
+        return usersStorage.get(id).getFriends().stream().map(usersStorage::get).collect(Collectors.toSet());
     }
 
     public Optional<User> findUserById(Long id) {

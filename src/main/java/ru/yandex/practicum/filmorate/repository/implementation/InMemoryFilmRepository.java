@@ -48,8 +48,6 @@ public class InMemoryFilmRepository implements FilmStorage {
     @Override
     public boolean addLike(Long filmId, Long userId) {
         Film film = filmsStorage.get(filmId);
-//        if (film.getLikes() == null)
-//            film.setLikes(new HashSet<>());
         return film.getLikes().add(userId);
     }
 
@@ -62,7 +60,7 @@ public class InMemoryFilmRepository implements FilmStorage {
     @Override
     public Collection<Film> getMostPopularFilms(final int count) {
         List<Film> filmsSorted = filmsStorage.values().stream()
-                .sorted(Comparator.comparingInt(it -> it.getLikes().size()))
+                .sorted(Comparator.comparingInt(it -> -it.getLikes().size()))
                 .collect(Collectors.toList());
         if (count > filmsStorage.size())
             return filmsSorted;
@@ -72,9 +70,12 @@ public class InMemoryFilmRepository implements FilmStorage {
     @Override
     public Collection<Film> getMostPopularFilms() {
         final int COUNT_TO_PREVIEW = 10;
-        return filmsStorage.values().stream()
+        List<Film> filmsOrdered = filmsStorage.values().stream()
                 .sorted(Comparator.comparingInt(it -> it.getLikes().size()))
-                .collect(Collectors.toList())
-                .subList(0, COUNT_TO_PREVIEW);
+                .collect(Collectors.toList());
+        if (filmsOrdered.size() > COUNT_TO_PREVIEW) {
+            filmsOrdered = filmsOrdered.subList(0, COUNT_TO_PREVIEW);
+        }
+        return filmsOrdered;
     }
 }
