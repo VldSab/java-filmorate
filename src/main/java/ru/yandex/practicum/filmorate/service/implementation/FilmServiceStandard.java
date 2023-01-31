@@ -39,6 +39,13 @@ public class FilmServiceStandard implements FilmService {
     }
 
     @Override
+    public Film getFilm(Long id) throws NotFoundException {
+        if (filmRepository.findFilmById(id).isEmpty())
+            throw new NotFoundException("Не существует фильма с таким id");
+        return filmRepository.findFilmById(id).get();
+    }
+
+    @Override
     public Collection<Film> listFilms() {
         return filmRepository.list();
     }

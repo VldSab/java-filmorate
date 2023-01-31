@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface FilmService {
     Film addFilm(Film film) throws ValidationException;
     Film updateFilm(Film film) throws ValidationException, NotFoundException;
+    Film getFilm(Long id) throws NotFoundException;
     Collection<Film> listFilms();
     boolean addLike(Long filmId, Long userId) throws NotFoundException;
     boolean deleteLike(Long filmId, Long userId) throws NotFoundException;

@@ -81,6 +81,13 @@ public class UserController extends FilmrateController {
         return createRawResponse(HttpStatus.OK, isSuccess);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) throws NotFoundException {
+        if (id == null)
+            throw new NullPointerException("Не передам id пользователя");
+        return createRawResponse(HttpStatus.OK, userService.getUser(id));
+    }
+
     @GetMapping("/{id}/friends")
     public ResponseEntity<?> getUserFriends(@PathVariable Long id) throws NotFoundException {
         if (id == null)

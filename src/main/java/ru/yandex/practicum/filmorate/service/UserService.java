@@ -9,6 +9,8 @@ import java.util.Collection;
 public interface UserService {
     User addUser(User user) throws ValidationException;
     User updateUser(User user) throws ValidationException, NotFoundException;
+
+    User getUser(Long id) throws NotFoundException;
     Collection<User> listUsers();
     boolean addFriend(Long id, Long friendId) throws NotFoundException, ValidationException;
     boolean deleteFriend(Long id, Long friendId) throws NotFoundException, ValidationException;

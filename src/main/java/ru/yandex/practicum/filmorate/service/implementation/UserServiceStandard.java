@@ -44,6 +44,13 @@ public class UserServiceStandard implements UserService {
     }
 
     @Override
+    public User getUser(Long id) throws NotFoundException {
+       if (userRepository.findUserById(id).isEmpty())
+           throw new NotFoundException("Не существует пользователя с таким id");
+       return userRepository.findUserById(id).get();
+    }
+
+    @Override
     public Collection<User> listUsers() {
         return userRepository.list();
     }
@@ -81,6 +88,8 @@ public class UserServiceStandard implements UserService {
             throw new NotFoundException("Не существует пользователя с таким id");
         return userRepository.getFriends(id);
     }
+
+
 
     private boolean isValidUser(User user) {
         boolean isValidEmail = user.getEmail().contains("@");
