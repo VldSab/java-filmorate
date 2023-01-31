@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.repository.InMemoryFilmRepository;
+import ru.yandex.practicum.filmorate.repository.implementation.InMemoryFilmRepository;
+import ru.yandex.practicum.filmorate.repository.implementation.InMemoryUserRepository;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +17,8 @@ class FilmServiceStandardTest {
     @BeforeAll
     public static void setServiceStandard() {
         InMemoryFilmRepository filmRepository = new InMemoryFilmRepository();
-        serviceStandard = new FilmServiceStandard(filmRepository);
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        serviceStandard = new FilmServiceStandard(filmRepository, userRepository);
     }
 
     private final Film validFilm = Film.builder()

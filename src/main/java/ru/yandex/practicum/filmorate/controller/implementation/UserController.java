@@ -16,9 +16,10 @@ import ru.yandex.practicum.filmorate.service.implementation.UserServiceStandard;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @Slf4j
@@ -64,9 +65,40 @@ public class UserController extends FilmrateController {
         return createRawResponse(status, uppdatedUser);
     }
 
+    @PutMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<?> addFriend(@PathVariable Long id, @PathVariable Long friendId) throws ValidationException, NotFoundException {
+        if (id == null || friendId == null)
+            throw new NullPointerException("Не передан id пользователя или id друга");
+        boolean isSuccess = userService.addFriend(id, friendId);
+        return createRawResponse(HttpStatus.OK, isSuccess);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<?> deleteFriend(@PathVariable Long id, @PathVariable Long friendId) throws ValidationException, NotFoundException {
+        if (id == null || friendId == null)
+            throw new NullPointerException("Не передан id пользователя или id друга");
+        boolean isSuccess = userService.deleteFriend(id, friendId);
+        return createRawResponse(HttpStatus.OK, isSuccess);
+    }
+
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<?> getUserFriends(@PathVariable Long id) throws NotFoundException {
+        if (id == null)
+            throw new NullPointerException("Не передам id пользователя");
+        return createRawResponse(HttpStatus.OK, userService.getFriends(id));
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public ResponseEntity<?> getCommonFriends(@PathVariable Long id, @PathVariable("otherId") Long userId) throws ValidationException, NotFoundException {
+        if (id == null || userId == null)
+            throw new NullPointerException("Не передан id первого или второго пользователя");
+        return createRawResponse(HttpStatus.OK, userService.getCommonFriends(id, userId));
+    }
+
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
         log.info("Getting all users list");
         return createRawResponse(HttpStatus.OK, userService.listUsers());
     }
+
 }

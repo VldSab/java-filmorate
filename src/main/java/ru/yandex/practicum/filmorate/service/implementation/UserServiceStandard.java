@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.InMemoryUserRepository;
+import ru.yandex.practicum.filmorate.repository.UserStorage;
+import ru.yandex.practicum.filmorate.repository.implementation.InMemoryUserRepository;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class UserServiceStandard implements UserService {
     /**
      * Бизнес-логика работы с пользователями.
      */
-    private final InMemoryUserRepository userRepository;
+    private final UserStorage userRepository;
 
     @Override
     public User addUser(User user) throws ValidationException {
@@ -44,6 +46,40 @@ public class UserServiceStandard implements UserService {
     @Override
     public Collection<User> listUsers() {
         return userRepository.list();
+    }
+
+    @Override
+    public boolean addFriend(Long id, Long friendId) throws NotFoundException, ValidationException {
+        if (userRepository.findUserById(id).isEmpty() || userRepository.findUserById(friendId).isEmpty())
+            throw new NotFoundException("Не существует пользователя с таким id");
+        if (Objects.equals(id, friendId))
+            throw new ValidationException("Пользователь не может быть другом сам себе");
+        return userRepository.addFriend(id, friendId);
+    }
+
+    @Override
+    public boolean deleteFriend(Long id, Long friendId) throws NotFoundException, ValidationException {
+        if (userRepository.findUserById(id).isEmpty() || userRepository.findUserById(friendId).isEmpty())
+            throw new NotFoundException("Не существует пользователя с таким id");
+        if (Objects.equals(id, friendId))
+            throw new ValidationException("Пользователь не может быть другом сам себе");
+        return userRepository.deleteFriend(id, friendId);
+    }
+
+    @Override
+    public Collection<User> getCommonFriends(Long id, Long userId) throws NotFoundException, ValidationException {
+        if (userRepository.findUserById(id).isEmpty() || userRepository.findUserById(userId).isEmpty())
+            throw new NotFoundException("Не существует пользователя с таким id");
+        if (Objects.equals(id, userId))
+            throw new ValidationException("Нельзя посмотреть общих друзей");
+        return userRepository.getCommonFriends(id, userId);
+    }
+
+    @Override
+    public Collection<User> getFriends(Long id) throws NotFoundException {
+        if (userRepository.findUserById(id).isEmpty())
+            throw new NotFoundException("Не существует пользователя с таким id");
+        return userRepository.getFriends(id);
     }
 
     private boolean isValidUser(User user) {

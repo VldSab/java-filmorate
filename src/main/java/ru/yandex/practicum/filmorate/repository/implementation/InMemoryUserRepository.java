@@ -1,16 +1,17 @@
-package ru.yandex.practicum.filmorate.repository;
+package ru.yandex.practicum.filmorate.repository.implementation;
 
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.util.*;
 
 @Repository
-public class InMemoryUserRepository {
+public class InMemoryUserRepository implements UserStorage {
     /**
      * Хранилище пользователей в оперативной памяти.
      */
-    private final Map<Long, User> usersStorage = new HashMap();
+    private final Map<Long, User> usersStorage = new HashMap<>();
     private final HashMap<String, Long> loginsStorage = new HashMap<>();
     private static Long id = 1L;
 
@@ -43,6 +44,34 @@ public class InMemoryUserRepository {
         return loginsStorage.containsKey(login)
                 ? Optional.of(usersStorage.get(loginsStorage.get(login)))
                 : Optional.empty();
+    }
+
+    @Override
+    public boolean addFriend(Long id, Long friendId) {
+        User user = usersStorage.get(id);
+        User friend = usersStorage.get(friendId);
+        return user.getFriends().add(friend) && friend.getFriends().add(user);
+    }
+
+    @Override
+    public boolean deleteFriend(Long id, Long friendId) {
+        User user = usersStorage.get(id);
+        User friend = usersStorage.get(friendId);
+        return user.getFriends().remove(friend) && friend.getFriends().remove(user);
+    }
+
+    @Override
+    public Collection<User> getCommonFriends(Long id, Long userId) {
+        User user = usersStorage.get(id);
+        User secondUser = usersStorage.get(userId);
+        Set<User> intersection = new HashSet<>(user.getFriends());
+        intersection.retainAll(secondUser.getFriends());
+        return intersection;
+    }
+
+    @Override
+    public Collection<User> getFriends(Long id) {
+        return usersStorage.get(id).getFriends();
     }
 
     public Optional<User> findUserById(Long id) {

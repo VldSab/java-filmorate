@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.repository.InMemoryFilmRepository;
+import ru.yandex.practicum.filmorate.repository.FilmStorage;
+import ru.yandex.practicum.filmorate.repository.UserStorage;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.time.LocalDate;
@@ -19,7 +20,8 @@ public class FilmServiceStandard implements FilmService {
      */
     private final static Long MAX_DESCRIPTION_LENGTH = 200L;
     private final static LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
-    private final InMemoryFilmRepository filmRepository;
+    private final FilmStorage filmRepository;
+    private final UserStorage userRepository;
 
     @Override
     public Film addFilm(Film film) throws ValidationException {
@@ -39,6 +41,34 @@ public class FilmServiceStandard implements FilmService {
     @Override
     public Collection<Film> listFilms() {
         return filmRepository.list();
+    }
+
+    @Override
+    public boolean addLike(Long filmId, Long userId) throws NotFoundException {
+        if (filmRepository.findFilmById(filmId).isEmpty())
+            throw new NotFoundException("Нет фильма с таким id");
+        if (userRepository.findUserById(userId).isEmpty())
+            throw new NotFoundException("Нет пользователя с таким id");
+        return filmRepository.addLike(filmId, userId);
+    }
+
+    @Override
+    public boolean deleteLike(Long filmId, Long userId) throws NotFoundException {
+        if (filmRepository.findFilmById(filmId).isEmpty())
+            throw new NotFoundException("Нет фильма с таким id");
+        if (userRepository.findUserById(userId).isEmpty())
+            throw new NotFoundException("Нет пользователя с таким id");
+        return filmRepository.deleteLike(filmId, userId);
+    }
+
+    @Override
+    public Collection<Film> getMostPopularFilms(int count) {
+        return filmRepository.getMostPopularFilms(count);
+    }
+
+    @Override
+    public Collection<Film> getMostPopularFilms() {
+        return filmRepository.getMostPopularFilms();
     }
 
     private boolean isValidFilm(Film film) {
