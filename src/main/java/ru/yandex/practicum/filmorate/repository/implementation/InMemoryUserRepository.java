@@ -72,7 +72,10 @@ public class InMemoryUserRepository implements UserStorage {
 
     @Override
     public Collection<User> getFriends(Long id) {
-        return usersStorage.get(id).getFriends().stream().map(usersStorage::get).collect(Collectors.toSet());
+        return usersStorage.get(id).getFriends().stream()
+                .map(usersStorage::get)
+                .sorted(Comparator.comparingLong(User::getId))
+                .collect(Collectors.toList());
     }
 
     public Optional<User> findUserById(Long id) {
