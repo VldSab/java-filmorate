@@ -85,15 +85,14 @@ public class FilmController extends FilmrateController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getFilm(@PathVariable Long id) throws NotFoundException {
         if (id == null)
-            throw new NullPointerException("Не передам id пользователя");
+            throw new NullPointerException("Не передан id пользователя");
         return createRawResponse(HttpStatus.OK, filmService.getFilm(id));
     }
 
     @GetMapping("/popular")
     public ResponseEntity<?> getMostPopular(@RequestParam(required = false) Integer count) {
-        if (count == null) {
-           return createRawResponse(HttpStatus.OK, filmService.getMostPopularFilms());
-        }
+        final int DEFAULT_COUNT = 10;
+        if (count == null) count = DEFAULT_COUNT;
         return createRawResponse(HttpStatus.OK, filmService.getMostPopularFilms(count));
     }
 

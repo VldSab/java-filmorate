@@ -73,11 +73,6 @@ public class FilmServiceStandard implements FilmService {
         return filmRepository.getMostPopularFilms(count);
     }
 
-    @Override
-    public Collection<Film> getMostPopularFilms() {
-        return filmRepository.getMostPopularFilms();
-    }
-
     private boolean isValidFilm(Film film) {
         boolean isValidLength = true;
         if (film.getDescription() != null)

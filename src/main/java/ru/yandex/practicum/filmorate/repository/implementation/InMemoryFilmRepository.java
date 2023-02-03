@@ -59,23 +59,10 @@ public class InMemoryFilmRepository implements FilmStorage {
 
     @Override
     public Collection<Film> getMostPopularFilms(final int count) {
-        List<Film> filmsSorted = filmsStorage.values().stream()
+        return filmsStorage.values().stream()
                 .sorted(Comparator.comparingInt(it -> -it.getLikes().size()))
+                .limit(count)
                 .collect(Collectors.toList());
-        if (count > filmsStorage.size())
-            return filmsSorted;
-        return filmsSorted.subList(0, count);
     }
 
-    @Override
-    public Collection<Film> getMostPopularFilms() {
-        final int COUNT_TO_PREVIEW = 10;
-        List<Film> filmsOrdered = filmsStorage.values().stream()
-                .sorted(Comparator.comparingInt(it -> it.getLikes().size()))
-                .collect(Collectors.toList());
-        if (filmsOrdered.size() > COUNT_TO_PREVIEW) {
-            filmsOrdered = filmsOrdered.subList(0, COUNT_TO_PREVIEW);
-        }
-        return filmsOrdered;
-    }
 }

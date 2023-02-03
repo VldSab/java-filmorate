@@ -15,5 +15,4 @@ public interface FilmService {
     boolean addLike(Long filmId, Long userId) throws NotFoundException;
     boolean deleteLike(Long filmId, Long userId) throws NotFoundException;
     Collection<Film> getMostPopularFilms(int count);
-    Collection<Film> getMostPopularFilms();
 }
