@@ -1,15 +1,14 @@
-package ru.yandex.practicum.filmorate.repository;
+package ru.yandex.practicum.filmorate.repository.implementation;
 
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.repository.FilmStorage;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryFilmRepository {
+public class InMemoryFilmRepository implements FilmStorage {
     /**
      * Хранилище фильмов в оперативной памяти.
      */
@@ -45,4 +44,25 @@ public class InMemoryFilmRepository {
                 ? Optional.of(filmsStorage.get(id))
                 : Optional.empty();
     }
+
+    @Override
+    public boolean addLike(Long filmId, Long userId) {
+        Film film = filmsStorage.get(filmId);
+        return film.getLikes().add(userId);
+    }
+
+    @Override
+    public boolean deleteLike(Long filmId, Long userId) {
+        Film film = filmsStorage.get(filmId);
+        return film.getLikes().remove(userId);
+    }
+
+    @Override
+    public Collection<Film> getMostPopularFilms(final int count) {
+        return filmsStorage.values().stream()
+                .sorted(Comparator.comparingInt(it -> -it.getLikes().size()))
+                .limit(count)
+                .collect(Collectors.toList());
+    }
+
 }

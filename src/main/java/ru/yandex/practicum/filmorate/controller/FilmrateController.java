@@ -1,14 +1,18 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import netscape.javascript.JSObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Response;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Map;
 
+@RestController
 public abstract class FilmrateController {
     public ResponseEntity<Response> createResponse(HttpStatus status, String message, Object data) {
         if (status.equals(HttpStatus.OK))
@@ -51,5 +55,32 @@ public abstract class FilmrateController {
                             .build()
             );
         return ResponseEntity.internalServerError().build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleHappinessOverflow(final NullPointerException e) {
+        return Map.of(
+                "error", "Не передан параметр",
+                "message", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleHappinessOverflow(final ValidationException e) {
+        return Map.of(
+                "error", "Ошибка валидации",
+                "message", e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleHappinessOverflow(final NotFoundException e) {
+        return Map.of(
+                "error", "Ресурс не найден",
+                "message", e.getMessage()
+        );
     }
 }

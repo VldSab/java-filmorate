@@ -16,6 +16,7 @@ import ru.yandex.practicum.filmorate.service.implementation.FilmServiceStandard;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/films")
@@ -42,8 +43,6 @@ public class FilmController extends FilmrateController {
         return createRawResponse(status, savedFilm);
     }
 
-
-
     @PutMapping
     public ResponseEntity<?> updateFilm(@Valid @RequestBody Film film) {
         Film uppdatedFilm;
@@ -63,10 +62,38 @@ public class FilmController extends FilmrateController {
         return createRawResponse(status, uppdatedFilm);
     }
 
+    @PutMapping("/{id}/like/{userId}")
+    public ResponseEntity<?> like(@PathVariable("id") Long filmId, @PathVariable Long userId) throws NotFoundException {
+        if (filmId == null || userId == null)
+            throw new NullPointerException("Не указан id фильма или id пользователя");
+        return createRawResponse(HttpStatus.OK, filmService.addLike(filmId, userId));
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public ResponseEntity<?> deleteLike(@PathVariable("id") Long filmId, @PathVariable Long userId) throws NotFoundException {
+        if (filmId == null || userId == null)
+            throw new NullPointerException("Не указан id фильма или id пользователя");
+        return createRawResponse(HttpStatus.OK, filmService.deleteLike(filmId, userId));
+    }
+
     @GetMapping
     public ResponseEntity<?> getAllFilms() {
         log.info("Getting all films list");
         return createRawResponse(HttpStatus.OK, filmService.listFilms());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getFilm(@PathVariable Long id) throws NotFoundException {
+        if (id == null)
+            throw new NullPointerException("Не передан id пользователя");
+        return createRawResponse(HttpStatus.OK, filmService.getFilm(id));
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<?> getMostPopular(@RequestParam(required = false) Integer count) {
+        final int DEFAULT_COUNT = 10;
+        if (count == null) count = DEFAULT_COUNT;
+        return createRawResponse(HttpStatus.OK, filmService.getMostPopularFilms(count));
     }
 
 }
