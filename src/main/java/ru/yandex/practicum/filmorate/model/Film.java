@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
+import ru.yandex.practicum.filmorate.model.enumerations.FilmAgeRating;
 
 import javax.validation.constraints.NotBlank;
 import java.time.Duration;
@@ -27,6 +28,7 @@ public class Film {
     String description;
     LocalDate releaseDate;
     Long duration;
+    FilmAgeRating ageRating;
     Set<Long> likes = new HashSet<>();
 
     public Map<String, Object> toMap() {

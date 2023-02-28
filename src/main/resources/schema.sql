@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS PUBLIC.films (
     name VARCHAR(255),
     description VARCHAR,
     release_date DATE,
-    duration NUMERIC
+    duration NUMERIC,
+    age_rating VARCHAR(10)
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
@@ -19,5 +20,38 @@ CREATE TABLE IF NOT EXISTS PUBLIC.likes (
     id INT AUTO_INCREMENT,
     film_id INT NOT NULL,
     user_id INT NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_film
+        FOREIGN KEY (film_id) REFERENCES films (id),
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.friendship (
+    id INT AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    friend_id INT NOT NULL,
+    is_confirmed BOOLEAN,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_user_f
+        FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_friend
+        FOREIGN KEY (friend_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.genres (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(255),
     PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.film_genres (
+    id INT AUTO_INCREMENT,
+    film_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_film_g
+        FOREIGN KEY (film_id) REFERENCES films (id),
+    CONSTRAINT fk_genre
+        FOREIGN KEY (genre_id) REFERENCES genres (id)
 );
