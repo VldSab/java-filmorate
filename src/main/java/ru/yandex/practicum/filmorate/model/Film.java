@@ -2,12 +2,10 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import ru.yandex.practicum.filmorate.model.enumerations.FilmAgeRating;
+import ru.yandex.practicum.filmorate.model.enumerations.Mpa;
 
 import javax.validation.constraints.NotBlank;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +26,8 @@ public class Film {
     String description;
     LocalDate releaseDate;
     Long duration;
-    FilmAgeRating ageRating;
+
+    Mpa mpa;
     Set<Long> likes = new HashSet<>();
 
     public Map<String, Object> toMap() {
@@ -37,6 +36,7 @@ public class Film {
         values.put("description", description);
         values.put("release_date", releaseDate);
         values.put("duration", duration);
+        values.put("mpa", mpa.getId());
         return values;
     }
 

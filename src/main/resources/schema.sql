@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.films (
     description VARCHAR,
     release_date DATE,
     duration NUMERIC,
-    age_rating VARCHAR(10)
+    mpa INT
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.friendship (
     id INT AUTO_INCREMENT,
     user_id INT NOT NULL,
     friend_id INT NOT NULL,
-    is_confirmed BOOLEAN,
+    is_confirmed VARCHAR(16),
     PRIMARY KEY (id),
     CONSTRAINT fk_user_f
         FOREIGN KEY (user_id) REFERENCES users (id),
