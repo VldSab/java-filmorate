@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.enumerations.FriendsipStatus;
+import ru.yandex.practicum.filmorate.model.constants.FriendsipStatus;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.sql.ResultSet;

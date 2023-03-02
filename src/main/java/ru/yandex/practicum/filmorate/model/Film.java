@@ -3,14 +3,10 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import ru.yandex.practicum.filmorate.model.enumerations.Mpa;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 @Data
@@ -26,8 +22,8 @@ public class Film {
     String description;
     LocalDate releaseDate;
     Long duration;
-
     Mpa mpa;
+    List<Genre> genres = new ArrayList<>();
     Set<Long> likes = new HashSet<>();
 
     public Map<String, Object> toMap() {

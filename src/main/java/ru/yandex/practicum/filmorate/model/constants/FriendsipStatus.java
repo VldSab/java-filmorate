@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model.enumerations;
+package ru.yandex.practicum.filmorate.model.constants;
 
 public enum FriendsipStatus {
     CONFIRMED,

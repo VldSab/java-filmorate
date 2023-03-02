@@ -39,11 +39,16 @@ CREATE TABLE IF NOT EXISTS PUBLIC.friendship (
         FOREIGN KEY (friend_id) REFERENCES users (id)
 );
 
+DROP TABLE IF EXISTS PUBLIC.genres CASCADE;
+
 CREATE TABLE IF NOT EXISTS PUBLIC.genres (
     id INT AUTO_INCREMENT,
     name VARCHAR(255),
     PRIMARY KEY (id)
 );
+
+INSERT INTO PUBLIC.genres (name)
+VALUES ('Комедия'), ('Драма'), ('Мультфильм'), ('Триллер'), ('Документальный'), ('Боевик');
 
 CREATE TABLE IF NOT EXISTS PUBLIC.film_genres (
     id INT AUTO_INCREMENT,
