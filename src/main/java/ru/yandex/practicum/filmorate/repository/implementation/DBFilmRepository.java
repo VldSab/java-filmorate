@@ -35,15 +35,16 @@ public class DBFilmRepository implements FilmStorage {
                 "FROM public.films " +
                 "WHERE id = ?";
 
+        String values = film.getGenres().stream().map(
+                it -> String.format("(%s, %s)", id, it.getId())
+                //it -> jdbcTemplate.update(sqlQuerySetGenre, id, it.getId())
+        ).collect(Collectors.joining(", "));
+
         String sqlQuerySetGenre = "INSERT INTO public.film_genres (film_id, genre_id) " +
-                "VALUES (?, ?)";
-
-        film.getGenres().forEach(
-                it -> jdbcTemplate.update(sqlQuerySetGenre, id, it.getId())
-        );
-
+                "VALUES " + values;
+        if (!values.isBlank())
+            jdbcTemplate.update(sqlQuerySetGenre);
         film.setId(id);
-
         return film;
     }
 

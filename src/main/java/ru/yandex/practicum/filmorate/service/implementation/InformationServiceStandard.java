@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.model.constants.MpaNames;
 import ru.yandex.practicum.filmorate.repository.InformationRepository;
 import ru.yandex.practicum.filmorate.service.InformationService;
 
