@@ -1,5 +1,5 @@
-# java-filmorate
-Template repository for Filmorate project.
+# Filmorate project
+Simple service where users can rate movies.
 
 Data Scheme:
 <picture>
