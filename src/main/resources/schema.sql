@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.films (
     description VARCHAR,
     release_date DATE,
     duration NUMERIC,
-    mpa INT
+    mpa_id INT
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.users (
@@ -60,3 +60,14 @@ CREATE TABLE IF NOT EXISTS PUBLIC.film_genres (
     CONSTRAINT fk_genre
         FOREIGN KEY (genre_id) REFERENCES genres (id)
 );
+
+DROP TABLE IF EXISTS PUBLIC.mpa CASCADE;
+
+CREATE TABLE IF NOT EXISTS PUBLIC.mpa (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(8),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO PUBLIC.mpa (name)
+VALUES ('G'), ('PG'), ('PG-13'), ('R'), ('NC-17');

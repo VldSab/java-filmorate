@@ -51,7 +51,7 @@ public class DBFilmRepository implements FilmStorage {
     public Film update(Film film) {
         // обновление таблицы фильмов
         String sqlUpdate = "UPDATE public.films " +
-                "SET name = ?, description = ?, release_date = ?, duration = ?, mpa = ? " +
+                "SET name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? " +
                 "WHERE id = ?";
         jdbcTemplate.update(sqlUpdate,
                 film.getName(),
@@ -74,7 +74,7 @@ public class DBFilmRepository implements FilmStorage {
         );
 
 
-        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa " +
+        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films " +
                 "WHERE id = ?";
         Film result = jdbcTemplate.queryForObject(sqlQueryGet, this::mapRowToFilm, film.getId());
@@ -85,7 +85,7 @@ public class DBFilmRepository implements FilmStorage {
 
     @Override
     public Collection<Film> list() {
-        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa " +
+        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films";
         String sqlGetGenres = "SELECT g.id, g.name " +
                 "FROM public.film_genres fg " +
@@ -104,7 +104,7 @@ public class DBFilmRepository implements FilmStorage {
 
     @Override
     public Optional<Film> findFilmById(Long id) {
-        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa " +
+        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films " +
                 "WHERE id = ?";
         String sqlGetGenres = "SELECT g.id, g.name " +
@@ -141,7 +141,7 @@ public class DBFilmRepository implements FilmStorage {
 
     @Override
     public Collection<Film> getMostPopularFilms(int count) {
-        String sqlGet = "SELECT id, name, description, release_date, duration, mpa " +
+        String sqlGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films t1 " +
                 "LEFT JOIN " +
                 "(SELECT film_id, COUNT(user_id) count FROM public.likes GROUP BY film_id) t2 " +
@@ -169,7 +169,7 @@ public class DBFilmRepository implements FilmStorage {
         } catch (NullPointerException e) {
             releaseDate = null;
         }
-        int mpaId = resultSet.getInt("mpa");
+        int mpaId = resultSet.getInt("mpa_id");
         return Film.builder()
                 .id(resultSet.getLong("id"))
                 .name(resultSet.getString("name"))

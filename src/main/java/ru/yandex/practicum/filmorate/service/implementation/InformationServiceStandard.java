@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.model.constants.GenreNames;
 import ru.yandex.practicum.filmorate.model.constants.MpaNames;
 import ru.yandex.practicum.filmorate.repository.InformationRepository;
 import ru.yandex.practicum.filmorate.service.InformationService;
@@ -21,7 +20,7 @@ public class InformationServiceStandard implements InformationService {
     @Override
     public Mpa getMpa(int id) throws NotFoundException {
         Mpa mpa = informationRepository.getMpaById(id);
-        if (MpaNames.getNameById(id) == null)
+        if (mpa == null)
             throw new NotFoundException(String.format("MPA с ID %s не найден", id));
         return mpa;
     }
@@ -29,7 +28,7 @@ public class InformationServiceStandard implements InformationService {
     @Override
     public Genre getGenre(int id) throws NotFoundException {
         Genre genre = informationRepository.getGenreById(id);
-        if (GenreNames.getNameById(id) == null)
+        if (genre == null)
             throw new NotFoundException(String.format("Жанр с ID %s не найден", id));
         return genre;
     }

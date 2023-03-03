@@ -1,40 +1,73 @@
 package ru.yandex.practicum.filmorate.repository.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.model.constants.GenreNames;
-import ru.yandex.practicum.filmorate.model.constants.MpaNames;
 import ru.yandex.practicum.filmorate.repository.InformationRepository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class InformationRepositoryStandard implements InformationRepository {
+    private final JdbcTemplate jdbcTemplate;
+
     @Override
     public Mpa getMpaById(int id) {
-        return new Mpa(id, MpaNames.getNameById(id));
+        String sqlGet = "SELECT id, name FROM public.mpa " +
+                "WHERE id = ?";
+        Mpa result;
+        try {
+            result = jdbcTemplate.queryForObject(sqlGet, this::mapRowToMpa, id);
+        } catch (DataAccessException e) {
+            result = null;
+        }
+        return result;
     }
 
     @Override
     public Genre getGenreById(int id) {
-        return new Genre(id, GenreNames.getNameById(id));
+        String sqlGet = "SELECT id, name FROM public.genres " +
+                "WHERE id = ?";
+        Genre result;
+        try {
+            result = jdbcTemplate.queryForObject(sqlGet, this::mapRowToGenre, id);
+        } catch (DataAccessException e) {
+            result = null;
+        }
+        return result;
     }
 
     @Override
     public List<Mpa> getAllMpas() {
-        return MpaNames.getAllNames().entrySet().stream()
-                .map(it -> new Mpa(it.getKey(), it.getValue()))
-                .collect(Collectors.toList());
+        String sqlGetAll = "SELECT * FROM public.mpa";
+        return jdbcTemplate.query(sqlGetAll, this::mapRowToMpa);
     }
 
     @Override
     public List<Genre> getAllGenres() {
-        return GenreNames.getAllNames().entrySet().stream()
-                .map(it -> new Genre(it.getKey(), it.getValue()))
-                .collect(Collectors.toList());
+        String sqlGetAll = "SELECT * FROM public.genres";
+        return jdbcTemplate.query(sqlGetAll, this::mapRowToGenre);
+    }
+
+    private Mpa mapRowToMpa(ResultSet resultSet, int rowNumber) throws SQLException {
+        return Mpa.builder()
+                .id(resultSet.getInt("id"))
+                .name(resultSet.getString("name"))
+                .build();
+    }
+
+    private Genre mapRowToGenre(ResultSet resultSet, int rowNumber) throws SQLException {
+        return Genre.builder()
+                .id(resultSet.getInt("id"))
+                .name(resultSet.getString("name"))
+                .build();
     }
 }
