@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
@@ -20,7 +22,9 @@ public class FilmServiceStandard implements FilmService {
      */
     private final static Long MAX_DESCRIPTION_LENGTH = 200L;
     private final static LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
+    @Qualifier("dbFilmRepository")
     private final FilmStorage filmRepository;
+    @Qualifier("dbUserRepository")
     private final UserStorage userRepository;
 
     @Override

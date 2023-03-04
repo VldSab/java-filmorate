@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface UserStorage {
-    User save(User film);
-    User update(User film);
+    User save(User user);
+    User update(User user);
     Collection<User> list();
     Optional<User> findUserById(Long id);
     Optional<User> findUserByLogin(String login);
