@@ -31,13 +31,8 @@ public class DBFilmRepository implements FilmStorage {
 
         Long id = simpleJdbcInsert.executeAndReturnKey(film.toMap()).longValue();
 
-        String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa " +
-                "FROM public.films " +
-                "WHERE id = ?";
-
         String values = film.getGenres().stream().map(
                 it -> String.format("(%s, %s)", id, it.getId())
-                //it -> jdbcTemplate.update(sqlQuerySetGenre, id, it.getId())
         ).collect(Collectors.joining(", "));
 
         String sqlQuerySetGenre = "INSERT INTO public.film_genres (film_id, genre_id) " +
@@ -74,7 +69,6 @@ public class DBFilmRepository implements FilmStorage {
                 it -> jdbcTemplate.update(sqlQuerySetGenre, film.getId(), it.getId())
         );
 
-
         String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films " +
                 "WHERE id = ?";
@@ -88,16 +82,31 @@ public class DBFilmRepository implements FilmStorage {
     public Collection<Film> list() {
         String sqlQueryGet = "SELECT id, name, description, release_date, duration, mpa_id " +
                 "FROM public.films";
-        String sqlGetGenres = "SELECT g.id, g.name " +
+        String sqlGetGenres = "SELECT fg.film_id, g.id, g.name " +
                 "FROM public.film_genres fg " +
-                "LEFT JOIN genres g ON fg.genre_id = g.id " +
-                "WHERE fg.film_id = ?";
+                "LEFT JOIN genres g ON fg.genre_id = g.id";
+
+        List<Map<String, Object>> listOfRows = jdbcTemplate.queryForList(sqlGetGenres);
+        Map<Long, TreeSet<Genre>> filmsToGenres = new HashMap<>();
+
+        listOfRows.forEach(
+                it -> {
+                    Long filmId = ((Number) it.get("film_id")).longValue();
+                    Integer genreId = (Integer) it.get("id");
+                    String genreName = (String) it.get("name");
+                    filmsToGenres.computeIfAbsent(filmId, k -> new TreeSet<>(Comparator.comparingInt(Genre::getId)))
+                            .add(new Genre(genreId, genreName));
+                }
+        );
 
         List<Film> films = jdbcTemplate.query(sqlQueryGet, this::mapRowToFilm);
         films.forEach(
                 it -> {
-                    Set<Genre> genres = new HashSet<>(jdbcTemplate.query(sqlGetGenres, this::mapRowToGenre, it.getId()));
-                    it.setGenres(genres.stream().sorted(Comparator.comparingInt(g -> g.getId())).collect(Collectors.toList()));
+                    try {
+                        it.setGenres(new ArrayList<>(filmsToGenres.get(it.getId())));
+                    } catch (NullPointerException e) {
+                        it.setGenres(new ArrayList<>());
+                    }
                 }
         );
         return films;
