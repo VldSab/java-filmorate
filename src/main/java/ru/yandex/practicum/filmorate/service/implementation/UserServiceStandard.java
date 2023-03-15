@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exeptions.ValidationException;
@@ -19,6 +20,7 @@ public class UserServiceStandard implements UserService {
     /**
      * Бизнес-логика работы с пользователями.
      */
+    @Qualifier("dbUserRepository")
     private final UserStorage userRepository;
 
     @Override
